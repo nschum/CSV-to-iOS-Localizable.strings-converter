@@ -10,7 +10,7 @@ class Command < Thor
     filename = options['gd_filename']
     gd = GoogleDoc.new
     if options['output_filename']
-      file_path = gd.download filename.to_s, options['output_filename']      
+      file_path = gd.download filename.to_s, options['output_filename']
     else
       file_path = gd.download filename.to_s
     end
@@ -21,7 +21,14 @@ class Command < Thor
     end
     file_path
   end
-  
+
+  desc "csv_open FILE", "Open in browser Google Spreadsheet containing translations"
+  def open(file = nil)
+    filename = file || options["filename"]
+    gd = GoogleDoc.new
+    gd.open filename.to_s
+  end
+
   private
   def options
     original_options = super
@@ -32,6 +39,6 @@ class Command < Thor
     defaults["dryrun"] = false unless defaults.has_key?("dryrun")
     defaults["fetch"] = false unless defaults.has_key?("fetch")
     defaults["keys_column"] = 0 unless defaults.has_key?("keys_column")
-    Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))  
+    Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
   end
 end
